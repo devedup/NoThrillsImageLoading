@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import NoThrillsSwift
+@testable import NoThrillsImageLoading
 
 class DiskCacheTest: XCTestCase {
     
@@ -23,7 +23,7 @@ class DiskCacheTest: XCTestCase {
     func testCreatingCacheDir() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        let cache = DiskCache()
+        let cache = DefaultDiskCache()
         _ = cache.cacheDir()
         _ = try! cache.pathForKey("dave")
         
@@ -31,7 +31,7 @@ class DiskCacheTest: XCTestCase {
     
     func testCachingAndRetrieving() {
         let testData = NSData()
-        let cache = DiskCache()
+        let cache = DefaultDiskCache()
         cache.storeData(testData, forKey: "mykey")
         
         let data = cache.dataForKey("mykey")
@@ -39,7 +39,7 @@ class DiskCacheTest: XCTestCase {
     }
 
     func testNoDataInCache() {
-        let cache = DiskCache()
+        let cache = DefaultDiskCache()
         
         let data = cache.dataForKey("notincache")
         XCTAssertNil(data)
@@ -47,7 +47,7 @@ class DiskCacheTest: XCTestCase {
     
     func testClearingCache() {
         let testData = NSData()
-        let cache = DiskCache()
+        let cache = DefaultDiskCache()
         cache.storeData(testData, forKey: "beforeclear")
         
         let dataBefore = cache.dataForKey("beforeclear")

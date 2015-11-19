@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import NoThrillsSwift
+@testable import NoThrillsImageLoading
 
 class URLKeyTest: XCTestCase {
 	
