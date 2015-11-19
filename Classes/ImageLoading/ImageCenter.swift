@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ImageCenter {
+public class ImageCenter {
 	
     static var cache: DiskCache = DefaultDiskCache()
     
@@ -26,7 +26,7 @@ class ImageCenter {
 	
     - returns: an operation which can be cancelled, or contains image from cache
     */
-	class func imageForURL(url: NSURL, onImageLoad: (UIImage?) -> Void) -> ImageLoadOperation? {
+	public class func imageForURL(url: NSURL, onImageLoad: (UIImage?) -> Void) -> ImageLoadOperation? {
         // First check the cache
         let cacheKey = url.cacheKey()
         if let cachedImage = cache.dataForKey(cacheKey) {
@@ -51,7 +51,7 @@ class ImageCenter {
 		
 }
 
-class ImageLoadOperation: NSOperation {
+public class ImageLoadOperation: NSOperation {
 		
 	private let onImageLoad: (UIImage?) -> Void
 	private let url: NSURL
@@ -65,7 +65,7 @@ class ImageLoadOperation: NSOperation {
 		self.cacheKey = url.cacheKey()
 	}
 	
-	override func main() {
+	public override func main() {
 		guard !self.cancelled else {
 			onImageLoad(nil)
 			return
