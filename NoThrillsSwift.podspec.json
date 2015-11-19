@@ -1,0 +1,26 @@
+{
+    "name": "NoThrillsSWift",
+    "version": "1.0.0",
+    "summary": "NoThrillsSwift - various swift source with no thrills attached",
+    "homepage": "https://github.com/devedup/NoThrillsSwift",
+    "license": {
+        "type": "BSD license with attribution",
+        "file": "Source Code License.md"
+    },
+    "authors": {
+        "David Casserly": "nothrills@devedup.com"
+    },
+    "source": {
+        "git": "https://github.com/devedup/NoThrillsSwift.git",
+        "tag": "1.0.0"
+    },
+    "platforms": {
+        "ios": "8.0",
+        "tvos": "9.0"
+    },
+    "source_files": [
+        "Classes",
+        "Classes/**/*.{h,m}"
+    ],
+    "requires_arc": true
+}
