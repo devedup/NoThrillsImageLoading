@@ -8,40 +8,70 @@
 import UIKit
 
 class ImageCenter {
-
-	private static let queue: dispatch_queue_t = {
-		dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+	
+	private static var imageDownloadQueue: NSOperationQueue = {
+		var queue = NSOperationQueue()
+		queue.name = "Image download queue"
+		queue.maxConcurrentOperationCount = 3
+		return queue
 	}()
 	
-	/**
-	If image is in the cache return it immediately, otherwise it will come back in the completion block
 	
-	- parameter url:        url of the image
-	- parameter completion: the completion block with the imag
+    /**
+    If image is in the cache return it immediately, otherwise it will come back in the completion block
 	
-	- returns: the image if retrieved from the cache
-	*/
-	func imageForURL(url: NSURL, onNetworkLoad: (UIImage) -> Void) -> UIImage? {
-		let cacheKey = url.cacheKey()
-		
-		// Check the cache first
-		let cache = DiskCache()
-		if let cachedImage = cache.dataForKey(cacheKey) {
-			if let image = UIImage(data: cachedImage) {
-				return image
-			}
+    - parameter url:        url of the image
+    - parameter completion: the completion block with the imag
+	
+    - returns: an operation which can be cancelled, or contains image from cache
+    */
+	class func imageForURL(url: NSURL, onNetworkLoad: (UIImage) -> Void) -> (image: UIImage?, operation: ImageLoadOperation?) {
+		let imageOperation = ImageLoadOperation(url: url, onNetworkLoad: onNetworkLoad)
+		if (imageOperation.image != nil) {
+			return (imageOperation.image, nil)
+		} else {
+			imageDownloadQueue.addOperation(imageOperation)
+			return (nil, imageOperation)
 		}
-		
-		dispatch_async(ImageCenter.queue) { () -> Void in
-			if let data = try? NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingUncached) {
-				if let image = UIImage(data: data) {
-					cache.storeData(data, forKey: cacheKey)
-					onNetworkLoad(image)
-				}
-			}
-		}
-		
-		return nil
 	}
 		
+}
+
+class ImageLoadOperation: NSOperation {
+	
+	var image: UIImage?
+	
+	private let onNetworkLoad: (UIImage) -> Void
+	private let url: NSURL
+	private let cache = DiskCache()
+	private let cacheKey: String
+	
+	init(url: NSURL, onNetworkLoad: (UIImage) -> Void) {
+		self.onNetworkLoad = onNetworkLoad
+		self.url = url
+		self.cacheKey = url.cacheKey()
+		if let cachedImage = cache.dataForKey(cacheKey) {
+			if let image = UIImage(data: cachedImage) {
+				 self.image = image
+			}
+		}
+	}
+	
+	override func main() {
+		guard !self.cancelled else {
+			return
+		}
+		guard self.image == nil else {
+			return
+		}
+		
+		if let data = try? NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingUncached) {
+			if let image = UIImage(data: data) {
+				self.image = image
+				cache.storeData(data, forKey: cacheKey)
+				onNetworkLoad(image)
+			}
+		}
+	}
+	
 }
