@@ -1,6 +1,6 @@
 # No Thrills Image Loading in Swift
 
-Do you have a URL? Do you want an Image?
+Do you have a URL? Do you want an Image? I think I can help you. 
 
 ####Master build status: 
 ![](https://travis-ci.org/devedup/NoThrillsImageLoading.svg?branch=master)
