@@ -21,13 +21,13 @@ class ImageCenterTest: XCTestCase {
 		let waitForImageLoad = expectationWithDescription("Expecting an image load")
 		
 		let imageURL = NSURL(string:"http://www.accrete.com/3dtextures/More3djayTextures/trees/got3d-tree23.png")!
-		let imageOp = ImageCenter.imageForURL(imageURL) { (image) -> Void in
+		let imageOp = ImageCenter.imageForURL(imageURL) { (image, url) -> Void in
 			
 			// Should have an image loaded now
 			XCTAssertNotNil(image)
 			
 			// Try again, but it should now be in the cache
-			let imageOp = ImageCenter.imageForURL(imageURL, onImageLoad: { (image) -> Void in
+			let imageOp = ImageCenter.imageForURL(imageURL, onImageLoad: { (image, url) -> Void in
                 XCTAssertNotNil(image)
             })
             // Shouldn't have created an image operatino this time
@@ -65,6 +65,21 @@ class ImageCenterTest: XCTestCase {
 		three?.cancel()
 		
 	}
-    
+	
+	func testURLReturned() {
+		let waitForImageLoad = expectationWithDescription("Expecting an image load")
+		
+		let imageURL = NSURL(string:"http://www.accrete.com/3dtextures/More3djayTextures/trees/got3d-tree23.png")!
+		ImageCenter.imageForURL(imageURL) { (image, url) -> Void in
+			XCTAssertEqual(imageURL, url)
+			// Let the test end
+			waitForImageLoad.fulfill()
+		}
+
+		// Wait for image to load from network
+		waitForExpectationsWithTimeout(10.0, handler:nil)
+		
+	}
+	
 	
 }

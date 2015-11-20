@@ -26,12 +26,12 @@ public class ImageCenter {
 	
     - returns: an operation which can be cancelled, or contains image from cache
     */
-	public class func imageForURL(url: NSURL, onImageLoad: (UIImage?) -> Void) -> ImageLoadOperation? {
+	public class func imageForURL(url: NSURL, onImageLoad: (UIImage?, NSURL) -> Void) -> ImageLoadOperation? {
         // First check the cache
         let cacheKey = url.cacheKey()
         if let cachedImage = cache.dataForKey(cacheKey) {
             if let image = UIImage(data: cachedImage) {
-                onImageLoad(image)
+                onImageLoad(image, url)
                 return nil
             }
         }
@@ -53,12 +53,12 @@ public class ImageCenter {
 
 public class ImageLoadOperation: NSOperation {
 		
-	private let onImageLoad: (UIImage?) -> Void
+	private let onImageLoad: (UIImage?, NSURL) -> Void
 	private let url: NSURL
     private let cache: DiskCache
 	private let cacheKey: String
 	
-    init(url: NSURL, cache: DiskCache, onImageLoad: (UIImage?) -> Void) {
+    init(url: NSURL, cache: DiskCache, onImageLoad: (UIImage?, NSURL) -> Void) {
 		self.onImageLoad = onImageLoad
 		self.url = url
         self.cache = cache
@@ -70,7 +70,7 @@ public class ImageLoadOperation: NSOperation {
 		// literring this method
 		let imageLoadCompletion: (UIImage?) -> Void = { (image) -> Void in
 			dispatch_async(dispatch_get_main_queue(), { () -> Void in
-				self.onImageLoad(image)
+				self.onImageLoad(image, self.url)
 			})
 		}
 		
