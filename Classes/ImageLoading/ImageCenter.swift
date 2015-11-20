@@ -66,24 +66,32 @@ public class ImageLoadOperation: NSOperation {
 	}
 	
 	public override func main() {
+		// Wrap the completion block to ensure dispatched to main queue and not have dispatch_async blocks
+		// literring this method
+		let imageLoadCompletion: (UIImage?) -> Void = { (image) -> Void in
+			dispatch_async(dispatch_get_main_queue(), { () -> Void in
+				self.onImageLoad(image)
+			})
+		}
+		
 		guard !self.cancelled else {
-			onImageLoad(nil)
+			imageLoadCompletion(nil)
 			return
 		}
 		
 		print("Loading image from network from \(self.url.absoluteString)")
 		if let data = try? NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingUncached) {
             guard !self.cancelled else {
-                onImageLoad(nil)
+				imageLoadCompletion(nil)
                 return
             }
             
 			if let image = UIImage(data: data) {
 				print("Completed loading image from network from \(self.url.absoluteString)")
 				cache.storeData(data, forKey: cacheKey)
-				onImageLoad(image)
+				imageLoadCompletion(image)
             } else {
-                onImageLoad(nil)
+				imageLoadCompletion(nil)
             }
 		}
 	}
