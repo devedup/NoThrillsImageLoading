@@ -44,7 +44,7 @@ class ImageCenterTest: XCTestCase {
 		//imageOp?.cancel()
 		
 		// Wait for image to load from network
-		waitForExpectationsWithTimeout(100.0, handler:nil)
+		waitForExpectationsWithTimeout(10.0, handler:nil)
     }
 
 	
