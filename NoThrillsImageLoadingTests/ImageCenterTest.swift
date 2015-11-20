@@ -20,7 +20,7 @@ class ImageCenterTest: XCTestCase {
     func testImageCaching() {
 		let waitForImageLoad = expectationWithDescription("Expecting an image load")
 		
-		let imageURL = NSURL(string:"https://www.google.co.uk/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")!
+		let imageURL = NSURL(string:"http://www.accrete.com/3dtextures/More3djayTextures/trees/got3d-tree23.png")!
 		let imageOp = ImageCenter.imageForURL(imageURL) { (image) -> Void in
 			
 			// Should have an image loaded now
