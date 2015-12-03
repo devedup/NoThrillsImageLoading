@@ -9,8 +9,9 @@ import UIKit
 
 public class ImageCenter {
 	
-    static var cache: DiskCache = DefaultDiskCache()
-    
+    static var diskCache: Cache = DefaultDiskCache()
+	static var memoryCache: Cache = DefaultMemoryCache()
+	
 	private static var imageDownloadQueue: NSOperationQueue = {
 		var queue = NSOperationQueue()
 		queue.name = "Image download queue"
@@ -26,17 +27,8 @@ public class ImageCenter {
 	
     - returns: an operation which can be cancelled, or contains image from cache
     */
-	public class func imageForURL(url: NSURL, onImageLoad: (UIImage?, NSURL) -> Void) -> ImageLoadOperation? {
-        // First check the cache
-        let cacheKey = url.cacheKey()
-        if let cachedImage = cache.dataForKey(cacheKey) {
-            if let image = UIImage(data: cachedImage) {
-                onImageLoad(image, url)
-                return nil
-            }
-        }
-        
-		let imageOperation = ImageLoadOperation(url: url, cache: cache, onImageLoad: onImageLoad)
+	public class func imageForURL(url: NSURL, onImageLoad: (UIImage?, NSURL) -> Void) -> ImageLoadOperation {
+		let imageOperation = ImageLoadOperation(url: url, diskCache: diskCache, memoryCache: memoryCache, onImageLoad: onImageLoad)
         imageDownloadQueue.addOperation(imageOperation)
         return imageOperation
 	}
@@ -55,13 +47,15 @@ public class ImageLoadOperation: NSOperation {
 		
 	private let onImageLoad: (UIImage?, NSURL) -> Void
 	private let url: NSURL
-    private let cache: DiskCache
+    private let diskCache: Cache
+	private let memoryCache: Cache
 	private let cacheKey: String
 	
-    init(url: NSURL, cache: DiskCache, onImageLoad: (UIImage?, NSURL) -> Void) {
+	init(url: NSURL, diskCache: Cache, memoryCache: Cache, onImageLoad: (UIImage?, NSURL) -> Void) {
 		self.onImageLoad = onImageLoad
 		self.url = url
-        self.cache = cache
+        self.diskCache = diskCache
+		self.memoryCache = memoryCache
 		self.cacheKey = url.cacheKey()
 	}
 	
@@ -79,6 +73,23 @@ public class ImageLoadOperation: NSOperation {
 			return
 		}
 		
+		// First check memory cache
+		if let cachedImage = memoryCache.dataForKey(cacheKey) {
+			if let image = UIImage(data: cachedImage) {
+				imageLoadCompletion(image)
+				return
+			}
+		}
+		
+		// Then check disk cache
+		if let cachedImage = diskCache.dataForKey(cacheKey) {
+			if let image = UIImage(data: cachedImage) {
+				imageLoadCompletion(image)
+				return
+			}
+		}
+		
+		// Now try the network
 		print("Loading image from network from \(self.url.absoluteString)")
 		if let data = try? NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingUncached) {
             guard !self.cancelled else {
@@ -88,7 +99,8 @@ public class ImageLoadOperation: NSOperation {
             
 			if let image = UIImage(data: data) {
 				print("Completed loading image from network from \(self.url.absoluteString)")
-				cache.storeData(data, forKey: cacheKey)
+				diskCache.storeData(data, forKey: cacheKey)
+				memoryCache.storeData(data, forKey: cacheKey)
 				imageLoadCompletion(image)
             } else {
 				imageLoadCompletion(nil)

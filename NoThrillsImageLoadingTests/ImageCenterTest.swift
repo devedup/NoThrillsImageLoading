@@ -27,11 +27,9 @@ class ImageCenterTest: XCTestCase {
 			XCTAssertNotNil(image)
 			
 			// Try again, but it should now be in the cache
-			let imageOp = ImageCenter.imageForURL(imageURL, onImageLoad: { (image, url) -> Void in
+			let _ = ImageCenter.imageForURL(imageURL, onImageLoad: { (image, url) -> Void in
                 XCTAssertNotNil(image)
             })
-            // Shouldn't have created an image operatino this time
-			XCTAssertNil(imageOp)
 			
 			// Let the test end
 			waitForImageLoad.fulfill()
@@ -60,9 +58,9 @@ class ImageCenterTest: XCTestCase {
             XCTFail()
 		}
 		
-		one?.cancel()
-		two?.cancel()
-		three?.cancel()
+		one.cancel()
+		two.cancel()
+		three.cancel()
 		
 	}
 	

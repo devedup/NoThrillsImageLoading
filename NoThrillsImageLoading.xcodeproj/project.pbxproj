@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		552C36481C10824700BAE19A /* MemoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552C36471C10824700BAE19A /* MemoryCache.swift */; };
+		552C364A1C10827100BAE19A /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552C36491C10827100BAE19A /* Cache.swift */; };
 		5538FC051BFE6F79007C3952 /* DiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5538FC011BFE6F79007C3952 /* DiskCache.swift */; };
 		5538FC061BFE6F79007C3952 /* URLKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5538FC021BFE6F79007C3952 /* URLKey.swift */; };
 		5538FC071BFE6F79007C3952 /* ImageCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5538FC041BFE6F79007C3952 /* ImageCenter.swift */; };
@@ -32,6 +34,8 @@
 /* Begin PBXFileReference section */
 		552BFF491BFE34DF00AC651E /* NoThrillsImageLoading.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NoThrillsImageLoading.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		552BFF4E1BFE34DF00AC651E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		552C36471C10824700BAE19A /* MemoryCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoryCache.swift; sourceTree = "<group>"; };
+		552C36491C10827100BAE19A /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		5538FBFE1BFE6F71007C3952 /* NoThrillsImageLoading.podspec.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = NoThrillsImageLoading.podspec.json; sourceTree = "<group>"; };
 		5538FC011BFE6F79007C3952 /* DiskCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskCache.swift; sourceTree = "<group>"; };
 		5538FC021BFE6F79007C3952 /* URLKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLKey.swift; sourceTree = "<group>"; };
@@ -129,7 +133,9 @@
 		5538FC001BFE6F79007C3952 /* Caching */ = {
 			isa = PBXGroup;
 			children = (
+				552C36491C10827100BAE19A /* Cache.swift */,
 				5538FC011BFE6F79007C3952 /* DiskCache.swift */,
+				552C36471C10824700BAE19A /* MemoryCache.swift */,
 				5538FC021BFE6F79007C3952 /* URLKey.swift */,
 			);
 			path = Caching;
@@ -355,6 +361,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5538FC051BFE6F79007C3952 /* DiskCache.swift in Sources */,
+				552C364A1C10827100BAE19A /* Cache.swift in Sources */,
+				552C36481C10824700BAE19A /* MemoryCache.swift in Sources */,
 				5538FC071BFE6F79007C3952 /* ImageCenter.swift in Sources */,
 				5538FC061BFE6F79007C3952 /* URLKey.swift in Sources */,
 			);
@@ -647,6 +655,7 @@
 				55B7DED41BFE7184005B94F9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		55B7DEE51BFE71E7005B94F9 /* Build configuration list for PBXNativeTarget "NoThrillsImageLoadingTV" */ = {
 			isa = XCConfigurationList;
@@ -655,6 +664,7 @@
 				55B7DEE71BFE71E7005B94F9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		55B7DEF21BFE7201005B94F9 /* Build configuration list for PBXNativeTarget "NoThrillsImageLoadingOSX" */ = {
 			isa = XCConfigurationList;
@@ -663,6 +673,7 @@
 				55B7DEF41BFE7201005B94F9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
