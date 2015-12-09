@@ -19,6 +19,13 @@ public class ImageCenter {
 		return queue
 	}()
 	
+	private static var imageCacheCheckQueue: NSOperationQueue = {
+		var queue = NSOperationQueue()
+		queue.name = "Image cache check queue"
+		queue.maxConcurrentOperationCount = 20
+		return queue
+	}()
+	
     /**
     If image is in the cache return it immediately, otherwise it will come back in the completion block
 	
@@ -28,11 +35,36 @@ public class ImageCenter {
     - returns: an operation which can be cancelled, or contains image from cache
     */
 	public class func imageForURL(url: NSURL, onImageLoad: (UIImage?, NSURL) -> Void) -> ImageLoadOperation {
+		
 		let imageOperation = ImageLoadOperation(url: url, diskCache: diskCache, memoryCache: memoryCache, onImageLoad: onImageLoad)
-        imageDownloadQueue.addOperation(imageOperation)
-        return imageOperation
+		
+		let cacheCheck = NSBlockOperation { () -> Void in
+			if let cachedImageData = ImageCenter.imageDataFromCache(url) {
+				dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+					if let image = UIImage(data: cachedImageData) {
+						dispatch_async(dispatch_get_main_queue(), { () -> Void in
+							onImageLoad(image, url)
+						})
+					}
+				})
+			} else {
+				imageDownloadQueue.addOperation(imageOperation)
+			}
+		}
+		imageCacheCheckQueue.addOperation(cacheCheck)
+		
+		return imageOperation
 	}
-    
+	
+	private class func imageDataFromCache(url: NSURL) -> NSData? {
+		if let cachedData = ImageCenter.memoryCache.dataForKey(url.cacheKey()) {
+			return cachedData
+		} else if let cachedData = ImageCenter.diskCache.dataForKey(url.cacheKey()) {
+			return cachedData
+		} else {
+			return nil
+		}
+	}
     
     /**
      Cancell all pending image load operations
@@ -74,6 +106,7 @@ public class ImageLoadOperation: NSOperation {
 		}
 		
 		// First check memory cache
+		/*
 		if let cachedImage = memoryCache.dataForKey(cacheKey) {
 			if let image = UIImage(data: cachedImage) {
 				imageLoadCompletion(image)
@@ -88,6 +121,7 @@ public class ImageLoadOperation: NSOperation {
 				return
 			}
 		}
+		*/
 		
 		// Now try the network
 		print("Loading image from network from \(self.url.absoluteString)")

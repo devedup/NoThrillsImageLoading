@@ -58,9 +58,9 @@ class ImageCenterTest: XCTestCase {
             XCTFail()
 		}
 		
-		one.cancel()
-		two.cancel()
-		three.cancel()
+		one?.cancel()
+		two?.cancel()
+		three?.cancel()
 		
 	}
 	
