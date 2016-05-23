@@ -1,6 +1,6 @@
 {
     "name": "NoThrillsImageLoading",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "summary": "NoThrillsImageLoading - image loading with no thrills attached",
     "homepage": "https://github.com/devedup/NoThrillsImageLoading",
     "license": {
@@ -12,7 +12,7 @@
     },
     "source": {
         "git": "https://github.com/devedup/NoThrillsImageLoading.git",
-        "tag": "1.0.8"
+        "tag": "1.0.9"
     },
     "platforms": {
         "ios": "8.0",
