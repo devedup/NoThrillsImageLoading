@@ -7,25 +7,25 @@
 //
 
 import UIKit
+import Foundation
 
-class DefaultMemoryCache: Cache {
+class DefaultMemoryCache: CacheProtocol {
 	
-	private let cache: NSCache
+	private let cache = NSCache<AnyObject, AnyObject>()
 	
 	init() {
-		cache = NSCache()
 	}
 	
-	func storeData(data: NSData, forKey key: String) {
-		cache.setObject(data, forKey: key)
+	func storeData(_ data: Data, forKey key: String) {
+		self.cache.setObject(data, forKey: key)
 	}
 	
 	
-	func dataForKey(key: String) -> NSData? {
-		return cache.objectForKey(key) as? NSData
+	func dataForKey(_ key: String) -> Data? {
+		return self.cache.object(forKey: key) as? Data
 	}
 	
 	func clearCache() {
-		cache.removeAllObjects()
+		self.cache.removeAllObjects()
 	}
 }

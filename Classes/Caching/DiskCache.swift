@@ -7,27 +7,27 @@
 
 import Foundation
 
-private enum DiskCacheError: ErrorType {
-    case CacheNotAvailable
+private enum DiskCacheError: Error {
+    case cacheNotAvailable
 }
 
-class DefaultDiskCache: Cache {
+class DefaultDiskCache: CacheProtocol {
 
 
-    func storeData(data: NSData, forKey key: String) {
+    func storeData(_ data: Data, forKey key: String) {
         do {
             let path = try pathForKey(key)
-            data.writeToFile(path, atomically: true)
+            try? data.write(to: URL(fileURLWithPath: path), options: [.atomic])
         } catch {
             print("Could not write data to cache")
         }
     }
     
 
-    func dataForKey(key: String) -> NSData? {
+    func dataForKey(_ key: String) -> Data? {
         do {
             let path = try pathForKey(key)
-            return NSData(contentsOfFile: path)
+            return (try? Data(contentsOf: URL(fileURLWithPath: path)))
         } catch {
             print("Could not retrieve from cache")
             return nil
@@ -37,8 +37,8 @@ class DefaultDiskCache: Cache {
     func clearCache() {
         do {
             let path = try pathForKey("")
-            let fm = NSFileManager()
-            try fm.removeItemAtPath(path)
+            let fm = FileManager()
+            try fm.removeItem(atPath: path)
         } catch {
             print("Could not clear the cache")
         }
@@ -56,9 +56,9 @@ class DefaultDiskCache: Cache {
     
     - returns: the path for the item you want
     */
-    internal func pathForKey(key: String) throws -> String {
+    internal func pathForKey(_ key: String) throws -> String {
         guard let cache = cacheDir() else {
-            throw DiskCacheError.CacheNotAvailable
+            throw DiskCacheError.cacheNotAvailable
         }
         
         let path = "\(cache)/\(key)"
@@ -71,13 +71,13 @@ class DefaultDiskCache: Cache {
      - returns: the cache dir
      */
     internal func cacheDir() -> String? {
-        let dirs = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
+        let dirs = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)
         let cachesDir = "\(dirs[0])/diskcache"
-        let fm = NSFileManager()
+        let fm = FileManager()
         var isDir: ObjCBool = true
-        if !fm.fileExistsAtPath(cachesDir, isDirectory: &isDir) {
+        if !fm.fileExists(atPath: cachesDir, isDirectory: &isDir) {
             do {
-                try fm.createDirectoryAtPath(cachesDir, withIntermediateDirectories: true, attributes: nil)
+                try fm.createDirectory(atPath: cachesDir, withIntermediateDirectories: true, attributes: nil)
             } catch {
                 print("Couldn't create cachesDir in caches directory")
                 return nil

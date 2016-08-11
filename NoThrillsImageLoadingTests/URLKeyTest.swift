@@ -11,7 +11,7 @@ import XCTest
 class URLKeyTest: XCTestCase {
 	
     func testURLCacheKey() {
-		let url = NSURL(string: "http://www.devedup.com/directory/toresrouce.jpg")
+		let url = URL(string: "http://www.devedup.com/directory/toresrouce.jpg")
 		
 		let cacheKey = url?.cacheKey()
 		

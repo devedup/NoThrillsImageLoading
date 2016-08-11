@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol Cache {
+protocol CacheProtocol {
 	
 	/**
 	Store data in the cache
@@ -16,7 +16,7 @@ protocol Cache {
 	- parameter data: the data you want to store
 	- parameter key:  the key for the data
 	*/
-	func storeData(data: NSData, forKey key: String)
+	func storeData(_ data: Data, forKey key: String)
 	
 	/**
 	Retrieve data from the cache
@@ -25,7 +25,7 @@ protocol Cache {
 	
 	- returns: either the data or nil if it wasn't in the cache
 	*/
-	func dataForKey(key: String) -> NSData?
+	func dataForKey(_ key: String) -> Data?
  
 	/**
 	Remove everything in the cache

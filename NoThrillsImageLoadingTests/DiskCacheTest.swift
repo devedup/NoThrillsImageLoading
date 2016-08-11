@@ -30,7 +30,7 @@ class DiskCacheTest: XCTestCase {
     }
     
     func testCachingAndRetrieving() {
-        let testData = NSData()
+        let testData = Data()
         let cache = DefaultDiskCache()
         cache.storeData(testData, forKey: "mykey")
         
@@ -46,7 +46,7 @@ class DiskCacheTest: XCTestCase {
     }
     
     func testClearingCache() {
-        let testData = NSData()
+        let testData = Data()
         let cache = DefaultDiskCache()
         cache.storeData(testData, forKey: "beforeclear")
         
