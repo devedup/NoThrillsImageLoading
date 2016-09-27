@@ -1,4 +1,4 @@
-language: objective-c
+language: swift
 osx_image: xcode8.0
 xcode_project: NoThrillsImageLoading.xcodeproj
 xcode_scheme: NoThrillsImageLoading
