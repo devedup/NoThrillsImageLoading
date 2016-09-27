@@ -10,19 +10,19 @@ import UIKit
 
 class DefaultMemoryCache: Cache {
 	
-	private let cache: NSCache
+	fileprivate let cache: NSCache<AnyObject, AnyObject>
 	
 	init() {
 		cache = NSCache()
 	}
 	
-	func storeData(data: NSData, forKey key: String) {
-		cache.setObject(data, forKey: key)
+	func storeData(_ data: Data, forKey key: String) {
+		cache.setObject(data as AnyObject, forKey: key as AnyObject)
 	}
 	
 	
-	func dataForKey(key: String) -> NSData? {
-		return cache.objectForKey(key) as? NSData
+	func dataForKey(_ key: String) -> Data? {
+		return cache.object(forKey: key as AnyObject) as? Data
 	}
 	
 	func clearCache() {

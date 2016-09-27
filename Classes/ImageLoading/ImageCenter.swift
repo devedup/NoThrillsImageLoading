@@ -12,15 +12,15 @@ public class ImageCenter {
     static var diskCache: Cache = DefaultDiskCache()
 	static var memoryCache: Cache = DefaultMemoryCache()
 	
-	private static var imageDownloadQueue: NSOperationQueue = {
-		var queue = NSOperationQueue()
+	private static var imageDownloadQueue: OperationQueue = {
+		var queue = OperationQueue()
 		queue.name = "Image download queue"
 		queue.maxConcurrentOperationCount = 5
 		return queue
 	}()
 	
-	private static var imageCacheCheckQueue: NSOperationQueue = {
-		var queue = NSOperationQueue()
+	private static var imageCacheCheckQueue: OperationQueue = {
+		var queue = OperationQueue()
 		queue.name = "Image cache check queue"
 		queue.maxConcurrentOperationCount = 20
 		return queue
@@ -34,19 +34,20 @@ public class ImageCenter {
 	
     - returns: an operation which can be cancelled, or contains image from cache
     */
-	public class func imageForURL(url: NSURL, onImageLoad: (UIImage?, NSURL) -> Void) -> ImageLoadOperation {
+    @discardableResult
+	public class func imageForURL(_ url: URL, onImageLoad: @escaping (UIImage?, URL) -> Void) -> ImageLoadOperation {
 		
 		let imageOperation = ImageLoadOperation(url: url, diskCache: diskCache, memoryCache: memoryCache, onImageLoad: onImageLoad)
 		
-		let cacheCheck = NSBlockOperation { () -> Void in
+		let cacheCheck = BlockOperation { () -> Void in
 			if let cachedImageData = ImageCenter.imageDataFromCache(url) {
-				dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-					if let image = UIImage(data: cachedImageData) {
-						dispatch_async(dispatch_get_main_queue(), { () -> Void in
-							onImageLoad(image, url)
-						})
-					}
-				})
+                DispatchQueue.global(qos: .default).async {
+                    if let image = UIImage(data: cachedImageData) {
+                        DispatchQueue.main.async(execute: { () -> Void in
+                            onImageLoad(image, url)
+                        })
+                    }
+                }
 			} else {
 				imageDownloadQueue.addOperation(imageOperation)
 			}
@@ -56,7 +57,7 @@ public class ImageCenter {
 		return imageOperation
 	}
 	
-	private class func imageDataFromCache(url: NSURL) -> NSData? {
+	private class func imageDataFromCache(_ url: URL) -> Data? {
 		if let cachedData = ImageCenter.memoryCache.dataForKey(url.cacheKey()) {
 			return cachedData
 		} else if let cachedData = ImageCenter.diskCache.dataForKey(url.cacheKey()) {
@@ -67,7 +68,7 @@ public class ImageCenter {
 	}
     
     /**
-     Cancell all pending image load operations
+     Cancel all pending image load operations
      */
     class func cancelAllImageOperations() {
         imageDownloadQueue.cancelAllOperations()
@@ -75,15 +76,15 @@ public class ImageCenter {
 		
 }
 
-public class ImageLoadOperation: NSOperation {
+public class ImageLoadOperation: Operation {
 		
-	private let onImageLoad: (UIImage?, NSURL) -> Void
-	private let url: NSURL
+	private let onImageLoad: (UIImage?, URL) -> Void
+	private let url: URL
     private let diskCache: Cache
 	private let memoryCache: Cache
 	private let cacheKey: String
 	
-	init(url: NSURL, diskCache: Cache, memoryCache: Cache, onImageLoad: (UIImage?, NSURL) -> Void) {
+	init(url: URL, diskCache: Cache, memoryCache: Cache, onImageLoad: @escaping (UIImage?, URL) -> Void) {
 		self.onImageLoad = onImageLoad
 		self.url = url
         self.diskCache = diskCache
@@ -95,12 +96,12 @@ public class ImageLoadOperation: NSOperation {
 		// Wrap the completion block to ensure dispatched to main queue and not have dispatch_async blocks
 		// literring this method
 		let imageLoadCompletion: (UIImage?) -> Void = { (image) -> Void in
-			dispatch_async(dispatch_get_main_queue(), { () -> Void in
+			DispatchQueue.main.async(execute: { () -> Void in
 				self.onImageLoad(image, self.url)
 			})
 		}
 		
-		guard !self.cancelled else {
+		guard !self.isCancelled else {
 			imageLoadCompletion(nil)
 			return
 		}
@@ -125,8 +126,8 @@ public class ImageLoadOperation: NSOperation {
 		
 		// Now try the network
 		print("Loading image from network from \(self.url.absoluteString)")
-		if let data = try? NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingUncached) {
-            guard !self.cancelled else {
+		if let data = try? Data(contentsOf: url, options: NSData.ReadingOptions.uncached) {
+            guard !self.isCancelled else {
 				imageLoadCompletion(nil)
                 return
             }

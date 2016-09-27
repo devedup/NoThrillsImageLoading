@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension NSURL {
+extension URL {
 
 	/**
 	Get a cache key for this url
@@ -15,10 +15,10 @@ extension NSURL {
 	- returns: a string key for the cache
 	*/
 	func cacheKey() -> String {
-		let characterSet = NSCharacterSet(charactersInString:"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_");
+		let characterSet = CharacterSet(charactersIn:"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_");
 		let urlString = self.absoluteString
-		var key = urlString.stringByTrimmingCharactersInSet(characterSet.invertedSet)
-		key = key.componentsSeparatedByCharactersInSet(characterSet.invertedSet).joinWithSeparator("")
+		var key = urlString.trimmingCharacters(in: characterSet.inverted)
+		key = key.components(separatedBy: characterSet.inverted).joined(separator: "")
 		return key
 	}
 	
