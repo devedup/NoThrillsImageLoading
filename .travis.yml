@@ -2,5 +2,5 @@ language: swift
 osx_image: xcode8.0
 xcode_project: NoThrillsImageLoading.xcodeproj
 xcode_scheme: NoThrillsImageLoading
-xcode_sdk: iphonesimulator10.0
+xcode_sdk: iphoneos
 
