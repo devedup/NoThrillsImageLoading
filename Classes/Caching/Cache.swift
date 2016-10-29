@@ -5,8 +5,7 @@
 //  Created by David Casserly on 03/12/2015.
 //  Copyright © 2015 DevedUpLtd. All rights reserved.
 //
-
-import UIKit
+import Foundation
 
 protocol Cache {
 	

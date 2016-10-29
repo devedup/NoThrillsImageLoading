@@ -16,12 +16,12 @@ class ImageCenterTest: XCTestCase {
 		
 		super.tearDown()
 	}
-
+    
     func testImageCaching() {
         let waitForImageLoad = expectation(description: "Expecting an image load")
 		
-		let imageURL = URL(string:"http://www.accrete.com/3dtextures/More3djayTextures/trees/got3d-tree23.png")!
-		let imageOp = ImageCenter.imageForURL(imageURL) { (image, url) -> Void in
+		let imageURL = URL(string:"http://dev.fiobuild.com/images/cards/hero-bg.png")!
+		let imageOp = ImageCenter.imageForURL(imageURL, httpHeaders: ["Authorization":"Basic aW9zYXBwOiFvczE2"]) { (image, url) -> Void in
 			
 			// Should have an image loaded now
 			XCTAssertNotNil(image)

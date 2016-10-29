@@ -11,7 +11,8 @@ public class ImageCenter {
 	
     static var diskCache: Cache = DefaultDiskCache()
 	static var memoryCache: Cache = DefaultMemoryCache()
-	
+    fileprivate static let urlSession: URLSession = URLSession(configuration: URLSessionConfiguration.default)
+    
 	private static var imageDownloadQueue: OperationQueue = {
 		var queue = OperationQueue()
 		queue.name = "Image download queue"
@@ -35,9 +36,9 @@ public class ImageCenter {
     - returns: an operation which can be cancelled, or contains image from cache
     */
     @discardableResult
-	public class func imageForURL(_ url: URL, onImageLoad: @escaping (UIImage?, URL) -> Void) -> ImageLoadOperation {
+	public class func imageForURL(_ url: URL, httpHeaders: [String: String] = [:], onImageLoad: @escaping (UIImage?, URL) -> Void) -> ImageLoadOperation {
 		
-		let imageOperation = ImageLoadOperation(url: url, diskCache: diskCache, memoryCache: memoryCache, onImageLoad: onImageLoad)
+		let imageOperation = ImageLoadOperation(url: url, diskCache: diskCache, memoryCache: memoryCache, httpHeaders: httpHeaders, onImageLoad: onImageLoad)
 		
 		let cacheCheck = BlockOperation { () -> Void in
 			if let cachedImageData = ImageCenter.imageDataFromCache(url) {
@@ -83,14 +84,22 @@ public class ImageLoadOperation: Operation {
     private let diskCache: Cache
 	private let memoryCache: Cache
 	private let cacheKey: String
-	
-	init(url: URL, diskCache: Cache, memoryCache: Cache, onImageLoad: @escaping (UIImage?, URL) -> Void) {
+    private let httpHeaders: [String: String]
+    private var imageLoadTask: URLSessionDataTask?
+    
+	init(url: URL, diskCache: Cache, memoryCache: Cache, httpHeaders: [String: String], onImageLoad: @escaping (UIImage?, URL) -> Void) {
 		self.onImageLoad = onImageLoad
 		self.url = url
         self.diskCache = diskCache
 		self.memoryCache = memoryCache
+        self.httpHeaders = httpHeaders
 		self.cacheKey = url.cacheKey()
 	}
+    
+    public override func cancel() {
+        super.cancel()
+        imageLoadTask?.cancel()
+    }
 	
 	public override func main() {
 		// Wrap the completion block to ensure dispatched to main queue and not have dispatch_async blocks
@@ -105,42 +114,45 @@ public class ImageLoadOperation: Operation {
 			imageLoadCompletion(nil)
 			return
 		}
-		
-		// First check memory cache
-		/*
-		if let cachedImage = memoryCache.dataForKey(cacheKey) {
-			if let image = UIImage(data: cachedImage) {
-				imageLoadCompletion(image)
-				return
-			}
-		}
-		
-		// Then check disk cache
-		if let cachedImage = diskCache.dataForKey(cacheKey) {
-			if let image = UIImage(data: cachedImage) {
-				imageLoadCompletion(image)
-				return
-			}
-		}
-		*/
-		
-		// Now try the network
+
 		print("Loading image from network from \(self.url.absoluteString)")
-		if let data = try? Data(contentsOf: url, options: NSData.ReadingOptions.uncached) {
+                
+        let session = ImageCenter.urlSession
+        var urlRequest = URLRequest(url: self.url)
+        for (key, value) in httpHeaders {
+            urlRequest.addValue(value, forHTTPHeaderField: key)
+        }
+        
+        imageLoadTask = session.dataTask(with: urlRequest) { (data, response, error) in
             guard !self.isCancelled else {
-				imageLoadCompletion(nil)
+                imageLoadCompletion(nil)
+                self.imageLoadTask?.cancel()
                 return
             }
             
-			if let image = UIImage(data: data) {
-				print("Completed loading image from network from \(self.url.absoluteString)")
-				diskCache.storeData(data, forKey: cacheKey)
-				memoryCache.storeData(data, forKey: cacheKey)
-				imageLoadCompletion(image)
-            } else {
-				imageLoadCompletion(nil)
+            guard error == nil else {
+                imageLoadCompletion(nil)
+                return
             }
-		}
+            
+            if let data = data, let image = UIImage(data: data) {
+                print("Completed loading image from network from \(self.url.absoluteString)")
+                
+                self.diskCache.storeData(data, forKey: self.cacheKey)
+                self.memoryCache.storeData(data, forKey: self.cacheKey)
+                imageLoadCompletion(image)
+            } else {
+                imageLoadCompletion(nil)
+                return
+            }
+        }
+        imageLoadTask?.resume()
+        
+        if self.isCancelled {
+            imageLoadCompletion(nil)
+            imageLoadTask?.cancel()
+            return
+        }
 	}
 	
 }

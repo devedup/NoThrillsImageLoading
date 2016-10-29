@@ -13,6 +13,14 @@
 		5538FC061BFE6F79007C3952 /* URLKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5538FC021BFE6F79007C3952 /* URLKey.swift */; };
 		5538FC071BFE6F79007C3952 /* ImageCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5538FC041BFE6F79007C3952 /* ImageCenter.swift */; };
 		5538FC121BFE7066007C3952 /* NoThrillsSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 5538FC111BFE7066007C3952 /* NoThrillsSwift.h */; };
+		5568B7151DC5357E00D41179 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5568B7141DC5357E00D41179 /* UIImageView+Extension.swift */; };
+		5568B7161DC5357E00D41179 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5568B7141DC5357E00D41179 /* UIImageView+Extension.swift */; };
+		5568B7191DC5359A00D41179 /* UIImageViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5568B7181DC5359A00D41179 /* UIImageViewTest.swift */; };
+		5568B71A1DC538CA00D41179 /* ImageCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5538FC041BFE6F79007C3952 /* ImageCenter.swift */; };
+		5568B71B1DC538D300D41179 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552C36491C10827100BAE19A /* Cache.swift */; };
+		5568B71C1DC538D600D41179 /* DiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5538FC011BFE6F79007C3952 /* DiskCache.swift */; };
+		5568B71D1DC538D900D41179 /* MemoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552C36471C10824700BAE19A /* MemoryCache.swift */; };
+		5568B71E1DC538DC00D41179 /* URLKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5538FC021BFE6F79007C3952 /* URLKey.swift */; };
 		55B7DECF1BFE7184005B94F9 /* NoThrillsImageLoading.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 552BFF491BFE34DF00AC651E /* NoThrillsImageLoading.framework */; };
 		55B7DED81BFE71A9005B94F9 /* DiskCacheTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B7DED51BFE71A9005B94F9 /* DiskCacheTest.swift */; };
 		55B7DED91BFE71A9005B94F9 /* ImageCenterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B7DED61BFE71A9005B94F9 /* ImageCenterTest.swift */; };
@@ -41,6 +49,8 @@
 		5538FC021BFE6F79007C3952 /* URLKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLKey.swift; sourceTree = "<group>"; };
 		5538FC041BFE6F79007C3952 /* ImageCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCenter.swift; sourceTree = "<group>"; };
 		5538FC111BFE7066007C3952 /* NoThrillsSwift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoThrillsSwift.h; sourceTree = SOURCE_ROOT; };
+		5568B7141DC5357E00D41179 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImageView+Extension.swift"; path = "UIImageView/UIImageView+Extension.swift"; sourceTree = "<group>"; };
+		5568B7181DC5359A00D41179 /* UIImageViewTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageViewTest.swift; sourceTree = "<group>"; };
 		55B7DECA1BFE7184005B94F9 /* NoThrillsImageLoadingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NoThrillsImageLoadingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		55B7DECE1BFE7184005B94F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		55B7DED51BFE71A9005B94F9 /* DiskCacheTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskCacheTest.swift; sourceTree = "<group>"; };
@@ -124,6 +134,7 @@
 		5538FBFF1BFE6F79007C3952 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				5568B70D1DC533FA00D41179 /* UIImageView */,
 				5538FC001BFE6F79007C3952 /* Caching */,
 				5538FC031BFE6F79007C3952 /* ImageLoading */,
 			);
@@ -149,12 +160,21 @@
 			path = ImageLoading;
 			sourceTree = "<group>";
 		};
+		5568B70D1DC533FA00D41179 /* UIImageView */ = {
+			isa = PBXGroup;
+			children = (
+				5568B7141DC5357E00D41179 /* UIImageView+Extension.swift */,
+			);
+			name = UIImageView;
+			sourceTree = "<group>";
+		};
 		55B7DECB1BFE7184005B94F9 /* NoThrillsImageLoadingTests */ = {
 			isa = PBXGroup;
 			children = (
 				55B7DED51BFE71A9005B94F9 /* DiskCacheTest.swift */,
 				55B7DED61BFE71A9005B94F9 /* ImageCenterTest.swift */,
 				55B7DED71BFE71A9005B94F9 /* URLKeyTest.swift */,
+				5568B7181DC5359A00D41179 /* UIImageViewTest.swift */,
 				55B7DECE1BFE7184005B94F9 /* Info.plist */,
 			);
 			path = NoThrillsImageLoadingTests;
@@ -300,9 +320,11 @@
 					};
 					55B7DEDF1BFE71E7005B94F9 = {
 						CreatedOnToolsVersion = 7.1.1;
+						LastSwiftMigration = 0800;
 					};
 					55B7DEEC1BFE7201005B94F9 = {
 						CreatedOnToolsVersion = 7.1.1;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -363,6 +385,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5538FC051BFE6F79007C3952 /* DiskCache.swift in Sources */,
+				5568B7151DC5357E00D41179 /* UIImageView+Extension.swift in Sources */,
 				552C364A1C10827100BAE19A /* Cache.swift in Sources */,
 				552C36481C10824700BAE19A /* MemoryCache.swift in Sources */,
 				5538FC071BFE6F79007C3952 /* ImageCenter.swift in Sources */,
@@ -374,6 +397,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5568B7191DC5359A00D41179 /* UIImageViewTest.swift in Sources */,
 				55B7DED91BFE71A9005B94F9 /* ImageCenterTest.swift in Sources */,
 				55B7DED81BFE71A9005B94F9 /* DiskCacheTest.swift in Sources */,
 				55B7DEDA1BFE71A9005B94F9 /* URLKeyTest.swift in Sources */,
@@ -384,6 +408,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5568B71A1DC538CA00D41179 /* ImageCenter.swift in Sources */,
+				5568B71D1DC538D900D41179 /* MemoryCache.swift in Sources */,
+				5568B71C1DC538D600D41179 /* DiskCache.swift in Sources */,
+				5568B71B1DC538D300D41179 /* Cache.swift in Sources */,
+				5568B7161DC5357E00D41179 /* UIImageView+Extension.swift in Sources */,
+				5568B71E1DC538DC00D41179 /* URLKey.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -563,6 +593,7 @@
 		55B7DEE61BFE71E7005B94F9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -575,6 +606,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -583,6 +616,7 @@
 		55B7DEE71BFE71E7005B94F9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -595,6 +629,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -603,6 +638,7 @@
 		55B7DEF31BFE7201005B94F9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -618,12 +654,15 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		55B7DEF41BFE7201005B94F9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -639,6 +678,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
