@@ -9,10 +9,10 @@
 import Foundation
 import UIKit
 
-extension UIImageView {
+public extension UIImageView {
     
     @discardableResult
-    func loadFrom(url: URL, httpHeaders: [String: String] = [:], completion: @escaping (Bool) -> Void) -> Operation {
+    public func loadFrom(url: URL, httpHeaders: [String: String] = [:], completion: @escaping (Bool) -> Void) -> Operation {
         let operation = ImageCenter.imageForURL(url, httpHeaders: httpHeaders) { (response) -> Void in
             if let image = response.0, response.1 == url {
                 self.image = image
