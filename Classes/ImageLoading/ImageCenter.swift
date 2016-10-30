@@ -60,8 +60,10 @@ public class ImageCenter {
 	
 	private class func imageDataFromCache(_ url: URL) -> Data? {
 		if let cachedData = ImageCenter.memoryCache.dataForKey(url.cacheKey()) {
+            print("Loaded image from memory cache \(url.absoluteString)")
 			return cachedData
 		} else if let cachedData = ImageCenter.diskCache.dataForKey(url.cacheKey()) {
+            print("Loaded image from disk cache \(url.absoluteString)")
 			return cachedData
 		} else {
 			return nil
@@ -136,7 +138,7 @@ public class ImageLoadOperation: Operation {
             }
             
             if let data = data, let image = UIImage(data: data) {
-                print("Completed loading image from network from \(self.url.absoluteString)")
+                print("Loaded image from network \(self.url.absoluteString)")
                 
                 self.diskCache.storeData(data, forKey: self.cacheKey)
                 self.memoryCache.storeData(data, forKey: self.cacheKey)
