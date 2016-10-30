@@ -9,6 +9,7 @@ import UIKit
 
 public class ImageCenter {
 	
+    static var debug: Bool = false
     static var diskCache: Cache = DefaultDiskCache()
 	static var memoryCache: Cache = DefaultMemoryCache()
     fileprivate static let urlSession: URLSession = URLSession(configuration: URLSessionConfiguration.default)
@@ -60,10 +61,10 @@ public class ImageCenter {
 	
 	private class func imageDataFromCache(_ url: URL) -> Data? {
 		if let cachedData = ImageCenter.memoryCache.dataForKey(url.cacheKey()) {
-            print("Loaded image from memory cache \(url.absoluteString)")
+            noThrillDebug("Loaded image from memory cache \(url.absoluteString)")
 			return cachedData
 		} else if let cachedData = ImageCenter.diskCache.dataForKey(url.cacheKey()) {
-            print("Loaded image from disk cache \(url.absoluteString)")
+            noThrillDebug("Loaded image from disk cache \(url.absoluteString)")
 			return cachedData
 		} else {
 			return nil
@@ -117,7 +118,7 @@ public class ImageLoadOperation: Operation {
 			return
 		}
 
-		print("Loading image from network from \(self.url.absoluteString)")
+		noThrillDebug("Loading image from network from \(self.url.absoluteString)")
                 
         let session = ImageCenter.urlSession
         var urlRequest = URLRequest(url: self.url)
@@ -138,8 +139,7 @@ public class ImageLoadOperation: Operation {
             }
             
             if let data = data, let image = UIImage(data: data) {
-                print("Loaded image from network \(self.url.absoluteString)")
-                
+                noThrillDebug("Loaded image from network \(self.url.absoluteString)")
                 self.diskCache.storeData(data, forKey: self.cacheKey)
                 self.memoryCache.storeData(data, forKey: self.cacheKey)
                 imageLoadCompletion(image)
@@ -157,4 +157,10 @@ public class ImageLoadOperation: Operation {
         }
 	}
 	
+}
+
+func noThrillDebug(_ message: String) {
+    if (ImageCenter.debug) {
+        print(message)
+    }
 }

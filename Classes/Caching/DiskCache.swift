@@ -19,7 +19,7 @@ class DefaultDiskCache: Cache {
             let path = try pathForKey(key)
             try? data.write(to: URL(fileURLWithPath: path), options: [.atomic])
         } catch {
-            print("Could not write data to cache")
+            noThrillDebug("Could not write data to cache")
         }
     }
     
@@ -29,7 +29,7 @@ class DefaultDiskCache: Cache {
             let path = try pathForKey(key)
             return (try? Data(contentsOf: URL(fileURLWithPath: path)))
         } catch {
-            print("Could not retrieve from cache")
+            noThrillDebug("Could not retrieve from cache")
             return nil
         }
     }
@@ -40,7 +40,7 @@ class DefaultDiskCache: Cache {
             let fm = FileManager()
             try fm.removeItem(atPath: path)
         } catch {
-            print("Could not clear the cache")
+            noThrillDebug("Could not clear the cache")
         }
     }
 
