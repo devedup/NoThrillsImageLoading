@@ -9,7 +9,7 @@ import UIKit
 
 public class ImageCenter {
 	
-    static var debug: Bool = false
+    public static var debug: Bool = false
     static var diskCache: Cache = DefaultDiskCache()
 	static var memoryCache: Cache = DefaultMemoryCache()
     fileprivate static let urlSession: URLSession = URLSession(configuration: URLSessionConfiguration.default)
