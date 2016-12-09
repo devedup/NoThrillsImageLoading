@@ -17,3 +17,4 @@ let imageOp = ImageCenter.imageForURL(imageURL) { (image) -> Void in
 // imageOp?cancel() // if you want to cancel the load
 ```
 
+
