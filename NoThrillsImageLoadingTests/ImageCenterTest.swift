@@ -20,6 +20,8 @@ class ImageCenterTest: XCTestCase {
     func testImageCaching() {
         let waitForImageLoad = expectation(description: "Expecting an image load")
 		
+        ImageCenter.debug = true
+        
 		let imageURL = URL(string:"http://dev.fiobuild.com/images/cards/hero-bg.png")!
 		let imageOp = ImageCenter.imageForURL(imageURL, httpHeaders: ["Authorization":"Basic aW9zYXBwOiFvczE2"]) { (image, url) -> Void in
 			

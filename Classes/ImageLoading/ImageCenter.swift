@@ -60,11 +60,14 @@ public class ImageCenter {
 	}
 	
 	private class func imageDataFromCache(_ url: URL) -> Data? {
-		if let cachedData = ImageCenter.memoryCache.dataForKey(url.cacheKey()) {
+        let key = url.cacheKey()
+		if let cachedData = ImageCenter.memoryCache.dataForKey(key) {
             noThrillDebug("Loaded image from memory cache \(url.absoluteString)")
 			return cachedData
-		} else if let cachedData = ImageCenter.diskCache.dataForKey(url.cacheKey()) {
-            noThrillDebug("Loaded image from disk cache \(url.absoluteString)")
+		} else if let cachedData = ImageCenter.diskCache.dataForKey(key) {
+            noThrillDebug("Loaded image from disk cache 2 \(url.absoluteString)")
+            // Put it into the memory cache
+            ImageCenter.memoryCache.storeData(cachedData, forKey: key)            
 			return cachedData
 		} else {
 			return nil
@@ -140,8 +143,8 @@ public class ImageLoadOperation: Operation {
             
             if let data = data, let image = UIImage(data: data) {
                 noThrillDebug("Loaded image from network \(self.url.absoluteString)")
-                self.diskCache.storeData(data, forKey: self.cacheKey)
                 self.memoryCache.storeData(data, forKey: self.cacheKey)
+                self.diskCache.storeData(data, forKey: self.cacheKey)
                 imageLoadCompletion(image)
             } else {
                 imageLoadCompletion(nil)
