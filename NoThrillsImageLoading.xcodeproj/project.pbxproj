@@ -49,6 +49,7 @@
 		5538FC021BFE6F79007C3952 /* URLKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLKey.swift; sourceTree = "<group>"; };
 		5538FC041BFE6F79007C3952 /* ImageCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCenter.swift; sourceTree = "<group>"; };
 		5538FC111BFE7066007C3952 /* NoThrillsSwift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoThrillsSwift.h; sourceTree = SOURCE_ROOT; };
+		554BD1BD1E1153040015812C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5568B7141DC5357E00D41179 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImageView+Extension.swift"; path = "UIImageView/UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		5568B7181DC5359A00D41179 /* UIImageViewTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageViewTest.swift; sourceTree = "<group>"; };
 		55B7DECA1BFE7184005B94F9 /* NoThrillsImageLoadingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NoThrillsImageLoadingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,6 +101,7 @@
 		552BFF3F1BFE34DF00AC651E = {
 			isa = PBXGroup;
 			children = (
+				554BD1BD1E1153040015812C /* README.md */,
 				5538FBFE1BFE6F71007C3952 /* NoThrillsImageLoading.podspec.json */,
 				5538FBFF1BFE6F79007C3952 /* Classes */,
 				552BFF4B1BFE34DF00AC651E /* SupportingFiles */,
