@@ -21,7 +21,7 @@ class DefaultMemoryCache: Cache {
 	
 	
 	func dataForKey(_ key: String) -> Data? {
-		return cache.object(forKey: key as NSString) as? Data
+		return cache.object(forKey: key as NSString) as Data?
 	}
 	
 	func clearCache() {

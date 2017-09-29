@@ -12,13 +12,12 @@ import UIKit
 public extension UIImageView {
     
     @discardableResult
-    public func loadFrom(url: URL, httpHeaders: [String: String] = [:], completion: @escaping (Bool) -> Void) -> Operation {
-        let operation = ImageCenter.imageForURL(url, httpHeaders: httpHeaders) { (response) -> Void in
-            if let image = response.0, response.1 == url {
-                self.image = image
-                completion(true)
+    public func loadFrom(url: URL, httpHeaders: [String: String] = [:], completion: @escaping (UIImage?) -> Void) -> Operation {
+        let operation = ImageCenter.imageForURL(url, httpHeaders: httpHeaders) { (imageP, urlP) -> Void in
+            if let image = imageP, url == urlP {
+                completion(image)
             } else {
-                completion(false)
+                completion(nil)
             }
         }
         return operation
