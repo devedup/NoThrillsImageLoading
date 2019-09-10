@@ -21,10 +21,10 @@ class ImageViewCenterTest: XCTestCase {
     func testImageViewLoad() {
         let waitForImageLoad = expectation(description: "Expecting an image load")
         
-        let imageURL = URL(string:"http://dev.fiobuild.com/images/cards/hero-bg.png")!
+        let imageURL = URL(string:"https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png")!
         let imageView = UIImageView()
-        let imageOp = imageView.loadFrom(url: imageURL, httpHeaders: ["Authorization":"Basic aW9zYXBwOiFvczE2"]) { (success) in
-            XCTAssertTrue(success)
+        let imageOp = imageView.loadFrom(url: imageURL) { (success) in
+            XCTAssertTrue((success != nil))
             if let image = imageView.image {
                 XCTAssertNotNil(image)
             } else {

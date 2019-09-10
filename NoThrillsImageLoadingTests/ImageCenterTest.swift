@@ -22,8 +22,8 @@ class ImageCenterTest: XCTestCase {
 		
         ImageCenter.debug = true
         
-		let imageURL = URL(string:"http://dev.fiobuild.com/images/cards/hero-bg.png")!
-		let imageOp = ImageCenter.imageForURL(imageURL, httpHeaders: ["Authorization":"Basic aW9zYXBwOiFvczE2"]) { (image, url) -> Void in
+		let imageURL = URL(string:"https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png")!
+		let imageOp = ImageCenter.imageForURL(imageURL) { (image, url) -> Void in
 			
 			// Should have an image loaded now
 			XCTAssertNotNil(image)
@@ -54,11 +54,11 @@ class ImageCenterTest: XCTestCase {
 		let imageThree = URL(string:"https://www.sapere.com/ckeditor_assets/pictures/35/content_oak_tree.png")!
 		
 		// The queue only runs 3, so four and five should be cancelled on time
-		let one = ImageCenter.imageForURL(imageOne, onImageLoad: {_ in })
-		let two = ImageCenter.imageForURL(imageTwo, onImageLoad: {_ in })
-		let three = ImageCenter.imageForURL(imageThree) { (image) -> Void in
+		let one = ImageCenter.imageForURL(imageOne, onImageLoad: {_,_  in })
+		let two = ImageCenter.imageForURL(imageTwo, onImageLoad: {_,_  in })
+        let three = ImageCenter.imageForURL(imageThree) { (image, url) in
             XCTFail()
-		}
+        }
 		
 		one.cancel()
 		two.cancel()
