@@ -1,12 +1,12 @@
 Pod::Spec.new do |s|
     s.name     = 'NoThrillsImageLoading'
-    s.version  = '1.0.19'
+    s.version  = '1.0.20'
 
     s.license  = { :type => 'BSD license with attribution', :file => 'SourceCodeLicense.txt' }
     s.summary  = 'NoThrillsImageLoading - image loading with no thrills attached'
     s.homepage = 'https://github.com/devedup/NoThrillsImageLoading'
     s.author   = { 'David Casserly' => 'nothrills@devedup.com' }
-    s.source   = { :git => 'https://github.com/devedup/NoThrillsImageLoading.git', :tag => "v#{s.version}" }
+    s.source   = { :git => 'https://github.com/devedup/NoThrillsImageLoading.git', :tag => "#{s.version}" }
 
     s.swift_versions = ['4.2', '5']
     s.ios.deployment_target = '9.0'
