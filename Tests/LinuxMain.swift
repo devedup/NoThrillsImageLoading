@@ -1,7 +1,7 @@
 import XCTest
 
-import DevedUpImageLoadingTests
+import NoThrillsImageLoadingTests
 
 var tests = [XCTestCaseEntry]()
-tests += DevedUpImageLoadingTests.allTests()
+tests += NoThrillsImageLoadingTests.allTests()
 XCTMain(tests)

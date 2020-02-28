@@ -8,7 +8,7 @@
 
 import XCTest
 import UIKit
-@testable import DevedUpImageLoading
+@testable import NoThrillsImageLoading
 
 class ImageViewCenterTest: XCTestCase {
     

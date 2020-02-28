@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import DevedUpImageLoading
+@testable import NoThrillsImageLoading
 
 class DiskCacheTest: XCTestCase {
     

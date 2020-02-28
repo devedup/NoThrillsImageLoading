@@ -4,13 +4,13 @@
 import PackageDescription
 
 let package = Package(
-    name: "DevedUpImageLoading",
+    name: "NoThrillsImageLoading",
     platforms: [.iOS(.v9)],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
-            name: "DevedUpImageLoading",
-            targets: ["DevedUpImageLoading"]),
+            name: "NoThrillsImageLoading",
+            targets: ["NoThrillsImageLoading"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -20,10 +20,10 @@ let package = Package(
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
-            name: "DevedUpImageLoading",
+            name: "NoThrillsImageLoading",
             dependencies: []),
         .testTarget(
-            name: "DevedUpImageLoadingTests",
-            dependencies: ["DevedUpImageLoading"]),
+            name: "NoThrillsImageLoadingTests",
+            dependencies: ["NoThrillsImageLoading"]),
     ]
 )
