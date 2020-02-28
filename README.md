@@ -1,4 +1,4 @@
-# No Thrills Image Loading - Swift 5
+# DevedUp Image Loading - Swift 5
 
 [![Build Status](https://travis-ci.org/devedup/NoThrillsImageLoading.svg?branch=master)](https://travis-ci.org/devedup/NoThrillsImageLoading)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/NoThrillsImageLoading.svg)](https://cocoapods.org/pods/NoThrillsImageLoading)

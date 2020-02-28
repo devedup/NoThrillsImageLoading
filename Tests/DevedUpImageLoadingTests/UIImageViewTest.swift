@@ -8,7 +8,7 @@
 
 import XCTest
 import UIKit
-@testable import NoThrillsImageLoading
+@testable import DevedUpImageLoading
 
 class ImageViewCenterTest: XCTestCase {
     
@@ -23,7 +23,7 @@ class ImageViewCenterTest: XCTestCase {
         
         let imageURL = URL(string:"https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png")!
         let imageView = UIImageView()
-        let imageOp = imageView.loadFrom(url: imageURL) { (success) in
+        let imageOp = imageView.loadFrom(url: imageURL) { (success, error) in
             XCTAssertTrue((success != nil))
             if let image = imageView.image {
                 XCTAssertNotNil(image)

@@ -9,7 +9,7 @@ import UIKit
 
 public class ImageCenter {
 	
-    public static var debug: Bool = false
+    public static var debug: Bool = true
     static var diskCache: Cache = DefaultDiskCache()
 	static var memoryCache: Cache = DefaultMemoryCache()
     fileprivate static let urlSession: URLSession = URLSession(configuration: URLSessionConfiguration.default)
@@ -37,7 +37,7 @@ public class ImageCenter {
     - returns: an operation which can be cancelled, or contains image from cache
     */
     @discardableResult
-	public class func imageForURL(_ url: URL, httpHeaders: [String: String] = [:], onImageLoad: @escaping (UIImage?, URL) -> Void) -> ImageLoadOperation {
+	public class func imageForURL(_ url: URL, httpHeaders: [String: String] = [:], onImageLoad: @escaping (UIImage?, URL, Error?) -> Void) -> ImageLoadOperation {
 		
 		let imageOperation = ImageLoadOperation(url: url, diskCache: diskCache, memoryCache: memoryCache, httpHeaders: httpHeaders, onImageLoad: onImageLoad)
 		
@@ -46,7 +46,7 @@ public class ImageCenter {
                 DispatchQueue.global(qos: .default).async {
                     if let image = UIImage(data: cachedImageData) {
                         DispatchQueue.main.async(execute: { () -> Void in
-                            onImageLoad(image, url)
+                            onImageLoad(image, url, nil)
                         })
                     }
                 }
@@ -85,7 +85,7 @@ public class ImageCenter {
 
 public class ImageLoadOperation: Operation {
 		
-	private let onImageLoad: (UIImage?, URL) -> Void
+	private let onImageLoad: (UIImage?, URL, Error?) -> Void
 	private let url: URL
     private let diskCache: Cache
 	private let memoryCache: Cache
@@ -93,7 +93,7 @@ public class ImageLoadOperation: Operation {
     private let httpHeaders: [String: String]
     private var imageLoadTask: URLSessionDataTask?
     
-	init(url: URL, diskCache: Cache, memoryCache: Cache, httpHeaders: [String: String], onImageLoad: @escaping (UIImage?, URL) -> Void) {
+	init(url: URL, diskCache: Cache, memoryCache: Cache, httpHeaders: [String: String], onImageLoad: @escaping (UIImage?, URL, Error?) -> Void) {
 		self.onImageLoad = onImageLoad
 		self.url = url
         self.diskCache = diskCache
@@ -110,14 +110,14 @@ public class ImageLoadOperation: Operation {
 	public override func main() {
 		// Wrap the completion block to ensure dispatched to main queue and not have dispatch_async blocks
 		// literring this method
-		let imageLoadCompletion: (UIImage?) -> Void = { (image) -> Void in
+		let imageLoadCompletion: (UIImage?, Error?) -> Void = { (image, error) -> Void in
 			DispatchQueue.main.async(execute: { () -> Void in
-				self.onImageLoad(image, self.url)
+				self.onImageLoad(image, self.url, error)
 			})
 		}
 		
 		guard !self.isCancelled else {
-			imageLoadCompletion(nil)
+			imageLoadCompletion(nil, nil)
 			return
 		}
 
@@ -131,13 +131,13 @@ public class ImageLoadOperation: Operation {
         
         imageLoadTask = session.dataTask(with: urlRequest) { (data, response, error) in
             guard !self.isCancelled else {
-                imageLoadCompletion(nil)
+                imageLoadCompletion(nil, nil)
                 self.imageLoadTask?.cancel()
                 return
             }
             
             guard error == nil else {
-                imageLoadCompletion(nil)
+                imageLoadCompletion(nil, error)
                 return
             }
             
@@ -145,16 +145,16 @@ public class ImageLoadOperation: Operation {
                 noThrillDebug("Loaded image from network \(self.url.absoluteString)")
                 self.memoryCache.storeData(data, forKey: self.cacheKey)
                 self.diskCache.storeData(data, forKey: self.cacheKey)
-                imageLoadCompletion(image)
+                imageLoadCompletion(image, nil)
             } else {
-                imageLoadCompletion(nil)
+                imageLoadCompletion(nil, error)
                 return
             }
         }
         imageLoadTask?.resume()
         
         if self.isCancelled {
-            imageLoadCompletion(nil)
+            imageLoadCompletion(nil, nil)
             imageLoadTask?.cancel()
             return
         }
