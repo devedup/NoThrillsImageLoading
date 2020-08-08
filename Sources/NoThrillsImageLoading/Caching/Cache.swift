@@ -15,7 +15,7 @@ protocol Cache {
 	- parameter data: the data you want to store
 	- parameter key:  the key for the data
 	*/
-	func storeData(_ data: Data, forKey key: String)
+	func storeData(_ data: Data, forKey key: String) -> URL?
 	
 	/**
 	Retrieve data from the cache
@@ -25,6 +25,10 @@ protocol Cache {
 	- returns: either the data or nil if it wasn't in the cache
 	*/
 	func dataForKey(_ key: String) -> Data?
+    
+    /// Find the
+    /// - Parameter key: the key for the data you want
+    func cachedFileURL(_ key: String) -> URL?
  
 	/**
 	Remove everything in the cache

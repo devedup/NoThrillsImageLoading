@@ -62,12 +62,17 @@ public extension UIImageView {
     func loadFrom(url: URL, httpHeaders: [String: String]? = [:], completion: ((UIImage?, Error?) -> Void)?) -> Operation {
         presentActivityIndicator()
         let headers = httpHeaders ?? [:]
-        let operation = ImageCenter.imageForURL(url, httpHeaders: headers) { (imageP, urlP, error) -> Void in
+        let operation = ImageCenter.imageForURL(url, httpHeaders: headers) { (result) in
             self.dismissActivityIndicator()
-            if let image = imageP, url == urlP {
-                self.image = image
-                completion?(image, nil)
-            } else {
+            switch result {
+            case .success(let result):
+                if result.1 == url {
+                    self.image = result.0
+                    completion?(result.0, nil)
+                } else {
+                    completion?(nil, nil)
+                }
+            case .failure(let error):
                 completion?(nil, error)
             }
         }

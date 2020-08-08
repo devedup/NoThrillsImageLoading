@@ -15,11 +15,15 @@ class DefaultMemoryCache: Cache {
 		cache = NSCache<NSString, NSData>()
 	}
 	
-	func storeData(_ data: Data, forKey key: String) {
+	func storeData(_ data: Data, forKey key: String) -> URL? {
 		cache.setObject(data as NSData, forKey: key as NSString)
+        return nil
 	}
 	
-	
+    func cachedFileURL(_ key: String) -> URL? {
+        return nil
+    }
+    
 	func dataForKey(_ key: String) -> Data? {
 		return cache.object(forKey: key as NSString) as Data?
 	}
