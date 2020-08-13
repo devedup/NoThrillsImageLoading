@@ -59,7 +59,7 @@ public extension UIImageView {
     }
     
     @discardableResult
-    func loadFrom(url: URL, httpHeaders: [String: String]? = [:], completion: ((UIImage?, Error?) -> Void)?) -> Operation {
+    func loadFrom(url: URL, httpHeaders: [String: String]? = [:], completion: ((UIImage?, Error?) -> Void)? = nil) -> Operation {
         presentActivityIndicator()
         let headers = httpHeaders ?? [:]
         let operation = ImageCenter.imageForURL(url, httpHeaders: headers) { (result) in
