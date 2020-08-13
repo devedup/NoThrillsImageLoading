@@ -13,7 +13,7 @@ enum ImageLoadError: Error {
 
 public class ImageCenter {
 	
-    public static var debug: Bool = true
+    public static var debug: Bool = false
     static var diskCache: Cache = DefaultDiskCache()
 	static var memoryCache: Cache = DefaultMemoryCache()
     
