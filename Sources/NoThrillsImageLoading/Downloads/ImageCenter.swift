@@ -11,6 +11,11 @@ enum ImageLoadError: Error {
     case couldNotConstructImage
 }
 
+public struct ImageAndURL {
+    let image: UIImage
+    let url: URL
+}
+
 public class ImageCenter {
 	
     public static var debug: Bool = false
@@ -40,15 +45,15 @@ public class ImageCenter {
     - returns: an operation which can be cancelled, or contains image from cache
     */
     @discardableResult
-	public class func imageForURL(_ url: URL, httpHeaders: [String: String] = [:], onImageLoad: @escaping (Result<(UIImage, URL), Error>) -> Void) -> DownloadOperation {
+	public class func imageForURL(_ url: URL, httpHeaders: [String: String] = [:], onImageLoad: @escaping (Result<ImageAndURL, Error>) -> Void) -> DownloadOperation {
         let imageOperation = DownloadOperation(url: url, httpHeaders: httpHeaders) { (result) in
             switch result {
             case .success(let data):
                 if let image = UIImage(data: data) {
                     let cacheKey = url.cacheKey()
-                    self.memoryCache.storeData(data, forKey: cacheKey)
-                    self.diskCache.storeData(data, forKey: cacheKey)
-                    onImageLoad(.success((image, url)))
+                    _ = self.memoryCache.storeData(data, forKey: cacheKey)
+                    _ = self.diskCache.storeData(data, forKey: cacheKey)
+                    onImageLoad(.success(ImageAndURL(image: image, url: url)))
                 } else {
                     onImageLoad(.failure(ImageLoadError.couldNotConstructImage))
                 }
@@ -62,7 +67,7 @@ public class ImageCenter {
                 DispatchQueue.global(qos: .default).async {
                     if let image = UIImage(data: cachedImageData) {
                         DispatchQueue.main.async(execute: { () -> Void in
-                            onImageLoad(.success((image, url)))
+                            onImageLoad(.success(ImageAndURL(image: image, url: url)))
                         })
                     }
                 }
@@ -83,7 +88,7 @@ public class ImageCenter {
 		} else if let cachedData = ImageCenter.diskCache.dataForKey(key) {
             noThrillDebug("Loaded image from disk cache 2 \(url.absoluteString)")
             // Put it into the memory cache
-            ImageCenter.memoryCache.storeData(cachedData, forKey: key)            
+            _ = ImageCenter.memoryCache.storeData(cachedData, forKey: key)            
 			return cachedData
 		} else {
 			return nil

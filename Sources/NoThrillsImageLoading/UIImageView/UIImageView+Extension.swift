@@ -59,16 +59,23 @@ public extension UIImageView {
     }
     
     @discardableResult
-    func loadFrom(url: URL, httpHeaders: [String: String]? = [:], completion: ((UIImage?, Error?) -> Void)? = nil) -> Operation {
+    func loadFrom(url: URL, animationDuration: Double = 0.0, httpHeaders: [String: String]? = [:], completion: ((UIImage?, Error?) -> Void)? = nil) -> Operation {
         presentActivityIndicator()
         let headers = httpHeaders ?? [:]
         let operation = ImageCenter.imageForURL(url, httpHeaders: headers) { (result) in
             self.dismissActivityIndicator()
             switch result {
             case .success(let result):
-                if result.1 == url {
-                    self.image = result.0
-                    completion?(result.0, nil)
+                if result.url == url {
+                    self.image = result.image
+                    if animationDuration > 0.0 {
+                        let transition = CATransition()
+                        transition.duration = animationDuration
+                        transition.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+                        transition.type = CATransitionType.fade;
+                        self.layer.add(transition, forKey: nil)
+                    }
+                    completion?(result.image, nil)
                 } else {
                     completion?(nil, nil)
                 }
