@@ -12,8 +12,8 @@ enum ImageLoadError: Error {
 }
 
 public struct ImageAndURL {
-    let image: UIImage
-    let url: URL
+    public let image: UIImage
+    public let url: URL
 }
 
 public class ImageCenter {
