@@ -11,6 +11,23 @@ enum ImageLoadError: Error {
     case couldNotConstructImage
 }
 
+public enum Priority {
+    case low
+    case normal
+    case high
+    
+    var queuePriority: Float {
+        switch self {
+        case .low:
+            return URLSessionDataTask.lowPriority
+        case .normal:
+            return URLSessionDataTask.defaultPriority
+        case .high:
+            return URLSessionDataTask.highPriority
+        }
+    }
+}
+
 public struct ImageAndURL {
     public let image: UIImage
     public let url: URL
@@ -35,6 +52,12 @@ public class ImageCenter {
 		queue.maxConcurrentOperationCount = 20
 		return queue
 	}()
+    
+    /// Clear the caches
+    public class func clearCache() {
+        ImageCenter.diskCache.clearCache()
+        ImageCenter.memoryCache.clearCache()
+    }
 	
     /**
     If image is in the cache return it immediately, otherwise it will come back in the completion block
@@ -45,7 +68,7 @@ public class ImageCenter {
     - returns: an operation which can be cancelled, or contains image from cache
     */
     @discardableResult
-	public class func imageForURL(_ url: URL, httpHeaders: [String: String] = [:], onImageLoad: @escaping (Result<ImageAndURL, Error>) -> Void) -> DownloadOperation {
+    public class func imageForURL(_ url: URL, httpHeaders: [String: String] = [:], priority: Priority = .normal, onImageLoad: @escaping (Result<ImageAndURL, Error>) -> Void) -> DownloadOperation {
         let imageOperation = DownloadOperation(url: url, httpHeaders: httpHeaders) { (result) in
             switch result {
             case .success(let data):
@@ -105,7 +128,7 @@ public class ImageCenter {
 }
 
 func noThrillDebug(_ message: String) {
-    if (ImageCenter.debug) {
+    //if (ImageCenter.debug) {
         print(message)
-    }
+    //}
 }

@@ -26,7 +26,6 @@ extension UIView {
     
 }
 
-@objc
 public extension UIImageView {
     
     private struct AssociatedKeys {
@@ -59,7 +58,7 @@ public extension UIImageView {
     }
     
     @discardableResult
-    func loadFrom(url: URL, animationDuration: Double = 0.0, httpHeaders: [String: String]? = [:], completion: ((UIImage?, Error?) -> Void)? = nil) -> Operation {
+    func loadFrom(url: URL, animationDuration: Double = 0.0, httpHeaders: [String: String]? = [:], priority: Priority = .normal, completion: ((UIImage?, Error?) -> Void)? = nil) -> Operation {
         presentActivityIndicator()
         let headers = httpHeaders ?? [:]
         let operation = ImageCenter.imageForURL(url, httpHeaders: headers) { (result) in

@@ -21,16 +21,19 @@ public class DownloadOperation: Operation {
     private let url: URL
     private let httpHeaders: [String: String]
     private var downloadTask: URLSessionDataTask?
+    private let priority: Priority
     
-    init(url: URL, httpHeaders: [String: String], onLoad: @escaping (Result<Data,Error>) -> Void) {
+    init(url: URL, httpHeaders: [String: String], priority: Priority = .normal, onLoad: @escaping (Result<Data,Error>) -> Void) {
         self.onLoad = onLoad
         self.url = url
         self.httpHeaders = httpHeaders
+        self.priority = priority
     }
     
     public override func cancel() {
         super.cancel()
         downloadTask?.cancel()
+        noThrillDebug("Cancelled \(self.url.absoluteString)")
     }
     
     public override func main() {
@@ -79,6 +82,7 @@ public class DownloadOperation: Operation {
             noThrillDebug("Loaded image from network \(self.url.absoluteString)")
             downloadCompletion(.success(data))
         }
+        downloadTask?.priority = self.priority.queuePriority
         downloadTask?.resume()
         
         if self.isCancelled {
