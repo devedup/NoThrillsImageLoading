@@ -31,7 +31,6 @@ public class FileCenterObjC: NSObject {
 
 public class FileCenter {
     
-    public static var debug: Bool = true
     static var diskCache: Cache = DefaultDiskCache()
     
     private static var downloadQueue: OperationQueue = {

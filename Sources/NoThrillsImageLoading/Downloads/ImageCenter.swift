@@ -128,7 +128,7 @@ public class ImageCenter {
 }
 
 func noThrillDebug(_ message: String) {
-    //if (ImageCenter.debug) {
+    if (ImageCenter.debug) {
         print(message)
-    //}
+    }
 }
